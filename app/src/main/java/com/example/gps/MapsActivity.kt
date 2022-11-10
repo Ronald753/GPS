@@ -8,6 +8,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
@@ -28,7 +29,8 @@ import kotlinx.coroutines.launch
 
 //los mapas se cargan asincronamente
             //una funcion que hace un apeticion de respuesta //cuando el mapa esta listo que respondemos
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
+    GoogleMap.OnMarkerDragListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -262,6 +264,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
         //Eventos en markers
         mMap.setOnMarkerClickListener(this)
+        mMap.setOnMarkerDragListener(this)
     }
     private fun setupToggleButtons(){
         binding.toggleGroup.addOnButtonCheckedListener {
@@ -282,5 +285,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         //marker es el marcador al que le hace click
         Toast.makeText(this,"${marker.position.latitude}, ${marker.position.longitude}",Toast.LENGTH_LONG).show()
         return false
+    }
+
+    //Cuando el marcador esta siendo arrastrado por el mapa
+    override fun onMarkerDrag(marker: Marker) {
+        //marker: el marcador que estas arrastrando
+        binding.toggleGroup.visibility= View.INVISIBLE
+        marker.alpha=0.4f
+
+    }
+
+    //Se suelta el marcador luego de haberlo arrastrado
+    override fun onMarkerDragEnd(marker: Marker) {
+        binding.toggleGroup.visibility = View.VISIBLE
+        marker.alpha=1.0f
+        //sirve para desplegar la venta de informacion
+        //llamada infoWindow
+        marker.showInfoWindow()
+    }
+
+    //cuando esta empezando a ser arrastrado el marcador
+    override fun onMarkerDragStart(marker: Marker) {
+        //ocultar la venta de información
+        marker.hideInfoWindow()
     }
 }
