@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">GPS</string>
+    <string name="btn_fld">el boton hace tal cosa</string>
+
+    <string name="dialog_text_title">Habiltar GPS?</string>
+    <string name="dialog_text_description">es aplicacion nesecita
+        hacer uso de sus  coordenadas, desea habilitar las mismas </string>
+    <string name="dialog_button_accept">Habilitar</string>
+    <string name="dialog_button_deny">Denegar</string>
+    <string name="btnCoordenadas">"este  boton onbtien coordendas "</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="btnLocalizacion">Localizacion</string>
+    <string name="btn_localizacion">LocalizaionBoton</string>
+    <string name="btn_normal">Normal</string>
+    <string name="btn_hibrido">Hibrido</string>
+    <string name="btn_satelital">Satelital</string>
+    <string name="btn_terreno">Terreno</string>
+    <string name="btn_none">N/A</string>
+
+</resources>
