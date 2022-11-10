@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,11 +13,19 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.example.gps.Coordenadas.casitaJhere
 
 import com.example.gps.Coordenadas.cementerioJudios
+import com.example.gps.Coordenadas.jardinBotanico
 import com.example.gps.Coordenadas.lapaz
+import com.example.gps.Coordenadas.miCasa
 import com.example.gps.Coordenadas.plazaAbaroa
+import com.example.gps.Coordenadas.plazaMurillo
+import com.example.gps.Coordenadas.plazaQuezada
+import com.example.gps.Coordenadas.salchiSalvaje
+import com.example.gps.Coordenadas.stadium
 import com.example.gps.Coordenadas.univalle
+import com.example.gps.Coordenadas.valleLuna
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -265,7 +274,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         //Eventos en markers
         mMap.setOnMarkerClickListener(this)
         mMap.setOnMarkerDragListener(this)
+        setupPolyline()
     }
+
+    /**
+     * Trazado de rutas
+     * partiendo de dibujar lineas en el mapa
+     * entre puntos de coordenadas
+     * (Polyline)
+     */
+
+    private fun setupPolyline() {
+
+        //de tener una ruta en formato de array o lista
+        val miRuta = mutableListOf(univalle, stadium, cementerioJudios, salchiSalvaje, valleLuna, jardinBotanico, casitaJhere)
+        //se configura y crea la linea
+        val polyline = mMap.addPolyline(PolylineOptions()
+            .color(Color.YELLOW) // color de la linea
+            .width(12f) //define ancho de la linea
+            .clickable(true) // permite que a la linea le puedas hacer click
+            .geodesic(true) // define la linea respetando la curvatura de la tierra
+        )
+        lifecycleScope.launch() {
+            val misRutasEnTiempoReal = mutableListOf<LatLng>()
+            for (punto in miRuta) {
+                misRutasEnTiempoReal.add(punto)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(punto, 17f))
+                polyline.points = misRutasEnTiempoReal
+                delay(2_000)
+            }
+        }
+
+        //tienes que indicar los puntos sobre los que se van a dibujar
+        //polyline.points = miRuta
+
+    }
+
+
+
+
     private fun setupToggleButtons(){
         binding.toggleGroup.addOnButtonCheckedListener {
                 group, checkedId, isChecked ->
